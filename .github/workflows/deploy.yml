@@ -3,7 +3,7 @@ name: Deploy to Local Server
 on:
   push:
     branches:
-      - main   # deploys when you push to main branch
+      - main
 
 jobs:
   deploy:
@@ -24,13 +24,21 @@ jobs:
           npm test
 
       - name: Deploy to Local Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "."
+          target: "/home/admin/domains/hydrogen"
+      
+      - name: Restart app on server
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: 103.160.107.22
-          username: root
-          key: SHA256:7IWvK9+x90mUc+VrPKTT+BN3k/1DkJvparIM/J3+7dE deploy@myapp
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd ../home/admin/domains/hydrogen
-            git pull origin main
+            cd /home/admin/domains/hydrogen
             npm install --production
             pm2 restart content || pm2 start npm --name "content" -- start
