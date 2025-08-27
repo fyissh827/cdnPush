@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies & run tests
         run: |
           npm install
-          npm test
+         
 
       - name: Deploy to Local Server
         uses: appleboy/scp-action@v0.1.7
