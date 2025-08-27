@@ -1,8 +1,47 @@
-- name: Deploy to Local Server
-  uses: appleboy/scp-action@v0.1.7
-  with:
-    host: ${{ secrets.SERVER_HOST }}
-    username: ${{ secrets.SERVER_USER }}
-    key: ${{ secrets.SERVER_SSH_KEY }}
-    source: "."
-    target: "/home/admin/domains/hydrogen"
+name: Deploy to Local Server
+
+on:
+  push:
+    branches:
+      - main   # runs only when pushing to main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Step 3: Install dependencies (just to ensure repo is valid)
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Copy project files to server
+      - name: Deploy project files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "."
+          target: "/home/admin/domains/hydrogen"
+
+      # Step 5: Install production dependencies & restart app on server
+      - name: Restart app on server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /home/admin/domains/hydrogen
+            npm install --production
+            pm2 restart content || pm2 start npm --name "content" -- start
