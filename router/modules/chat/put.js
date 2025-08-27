@@ -44,7 +44,7 @@ async chat_put(req, res){
 	})
 	.catch((error) => {
 	 
-	  res.json({msg : 'Error',
+	  res.json({msg : 'Error', 
 	  id : 	'0',
 	  selected_id : selected_id,
 	  user_id : user2	});
