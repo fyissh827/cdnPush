@@ -3,7 +3,7 @@ name: Deploy to Local Server
 on:
   push:
     branches:
-      - main   # runs only when pushing to main branch
+      - main  # runs only when pushing to main branch
 
 jobs:
   deploy:
@@ -14,17 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      # Step 3: Install dependencies (just to ensure repo is valid)
-      - name: Install dependencies
-        run: npm install
-
-      # Step 4: Copy project files to server
+      # Step 2: Copy project files to server
       - name: Deploy project files to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -34,8 +24,8 @@ jobs:
           source: "."
           target: "/home/admin/domains/hydrogen"
 
-      # Step 5: Install production dependencies & restart app on server
-      - name: Restart app on server
+      # Step 3: Build Docker image & run container on server
+      - name: Build and run Docker container
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -43,5 +33,17 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /home/admin/domains/hydrogen
-            npm install --production
-            pm2 restart content || pm2 start npm --name "content" -- start
+
+            # Remove old container if exists
+            docker rm -f cdnpush-container || true
+
+            # Build new Docker image
+            docker build -t cdnpush:latest .
+
+            # Run the container with media folder mounted
+            docker run -d \
+              -p 3003:3003 \
+              --name cdnpush-container \
+              -v /home/admin/domains/media:/media \
+              -e IMAGE_PATH=/media \
+              cdnpush:latest

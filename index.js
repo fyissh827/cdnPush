@@ -60,7 +60,7 @@ app.get("/", (req, res) => {
         </style>
       </head>
       <body>
-        <h1>CDN SERVICE WORK CORRECTLY.</h1>
+        <h1>CDN SERVICE WORKING CORRECTLY.</h1>
       </body>
     </html>
   `);
