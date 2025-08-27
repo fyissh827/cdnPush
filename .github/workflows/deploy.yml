@@ -28,7 +28,7 @@ jobs:
       - name: Deploy project files to server
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.SERVER_HOST }}
+          host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "."
@@ -38,7 +38,7 @@ jobs:
       - name: Restart app on server
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: ${{ secrets.SERVER_HOST }}
+          host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
