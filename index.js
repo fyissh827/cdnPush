@@ -38,6 +38,33 @@ app.use(
     }
   })
 );
+app.get("/", (req, res) => {
+  res.send(`
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <title>CDN Check</title>
+        <style>
+          body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+          }
+          h1 {
+            text-align: center;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>CDN SERVICE WORK CORRECTLY.</h1>
+      </body>
+    </html>
+  `);
+});
 // ok....... ggdgdf
 app.use(favicon(path.join(__dirname,  'true.png')))
 app.use(bodyParser.urlencoded({ extended: true }));
