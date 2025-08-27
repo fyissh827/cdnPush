@@ -70,6 +70,7 @@ app.use(favicon(path.join(__dirname,  'true.png')))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 globalThis.mediaDirectory =  "/home/admin/domains/media";  //path.resolve(__dirname  + '/../media');
+console.log(globalThis.mediaDirectory);
 app.use('/user/cus_profile/v2/photo',  express.static(`${globalThis.mediaDirectory}/user/images`));
 app.use('/user/cus_profile/v1/photo', express.static(`${globalThis.mediaDirectory}/user/image`));
 app.use('/grewtale/media/v1/photo', express.static(`${globalThis.mediaDirectory}/grewtales/images`));
