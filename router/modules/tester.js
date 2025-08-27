@@ -21,7 +21,7 @@ const  hashing = require("../../managers/hashing.js")
 				if (t < 60) p = {
 					t: t,
 					f: "Min"
-				};
+				}; 
 				else {
 					let t = date.subtract(l, e).toHours();
 					if (t < 24) p = {

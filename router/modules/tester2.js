@@ -24,7 +24,7 @@ module.exports = {
                     type: obj.data[i].type,
                     file: obj.data[i].file,
                     file_type: obj.data[i].file_type,
-                    button: obj.data[i].button,
+                    button: obj.data[i].button, 
                     created_at: filter_date,
                     username: obj.data[i].username,
                     user_id: obj.data[i].user_id

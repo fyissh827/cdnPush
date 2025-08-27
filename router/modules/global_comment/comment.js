@@ -21,7 +21,7 @@ async comment(req, res){
 	var standard = req.body.standard;
 	var iso = req.body.iso;
 	var point = req.body.point
-
+ 
   
 	axios.post('http://localhost:3000/p/comment', { obj, file_type ,userId , grewtale, primitive_id, accelerator, message, type, standard, iso, point })
 	.then(response => {
