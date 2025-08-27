@@ -1,0 +1,36 @@
+name: Deploy to Local Server
+
+on:
+  push:
+    branches:
+      - main   # deploys when you push to main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies & run tests
+        run: |
+          npm install
+          npm test
+
+      - name: Deploy to Local Server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 103.160.107.22
+          username: root
+          key: SHA256:7IWvK9+x90mUc+VrPKTT+BN3k/1DkJvparIM/J3+7dE deploy@myapp
+          script: |
+            cd ../home/admin/domains/hydrogen
+            git pull origin main
+            npm install --production
+            pm2 restart content || pm2 start npm --name "content" -- start
