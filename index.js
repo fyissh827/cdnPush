@@ -80,4 +80,4 @@ app.use('/grewtale/media/v1/videos', express.static(`${globalThis.mediaDirectory
 app.use('/grewtale/media/v1/thumbnails', express.static(`${globalThis.mediaDirectory}/grewtales/thumbnails`));
 app.use('', router);
 // run server
-app.listen(PORT, () => lightship.signalReady()); 
+app.listen(PORT, "0.0.0.0", () => lightship.signalReady()); 
