@@ -3,20 +3,22 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
-var path = require('path')
+var path = require('path');
 const router = require('./router/index.js');
-var favicon = require('serve-favicon')
+var favicon = require('serve-favicon');
 const { createLightship } = require('lightship');
 const bunyanMiddleware = require('bunyan-middleware');
-const { logger ,bunyan } = require('./helper/logger');
+const { logger, bunyan } = require('./helper/logger');
 const lightship = createLightship();
+require('dotenv').config();
+
 // set up port
 const PORT = process.env.PORT || 3003;
 
 app.use(helmet());
 app.use(
   helmet.referrerPolicy({
-    policy: "no-referrer"
+    policy: 'no-referrer',
   })
 );
 app.use(cors());
@@ -28,17 +30,11 @@ app.use(
     obscureHeaders: ['authorization'],
     logger,
     additionalRequestFinishData: (_req, _res) => {
-		
-      return{
-		 
-	  }
-		 
-		  
-	  ;
-    }
+      return {};
+    },
   })
 );
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.send(`
     <!doctype html>
     <html lang="en">
@@ -65,24 +61,33 @@ app.get("/", (req, res) => {
     </html>
   `);
 });
-globalThis.mediaDirectory =   process.env.IMAGE_PATH || "/home/admin/domains/media";  //path.resolve(__dirname  + '/../media');
-console.log(globalThis.mediaDirectory);
-app.get("/media", function(req, res){
+globalThis.mediaDirectory = process.env.IMAGE_PATH || '/home/admin/domains/media'; //path.resolve(__dirname  + '/../media');
+console.log(process.env);
+app.get('/media', function (req, res) {
   res.json(globalThis.mediaDirectory);
 });
 // ok....... ggdgdf
-app.use(favicon(path.join(__dirname,  'true.png')))
+app.use(favicon(path.join(__dirname, 'true.png')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/user/cus_profile/v2/photo',  express.static(`${globalThis.mediaDirectory}/user/images`));
+app.use('/user/cus_profile/v2/photo', express.static(`${globalThis.mediaDirectory}/user/images`));
 app.use('/user/cus_profile/v1/photo', express.static(`${globalThis.mediaDirectory}/user/image`));
-app.use('/grewtale/media/v1/photo', express.static(`${globalThis.mediaDirectory}/grewtales/images`));
+app.use(
+  '/grewtale/media/v1/photo',
+  express.static(`${globalThis.mediaDirectory}/grewtales/images`)
+);
 app.use('/comment/media/v1/photo', express.static(`${globalThis.mediaDirectory}/comments/images`));
 app.use('/chat/media/v1/image', express.static(`${globalThis.mediaDirectory}/chat/image`));
 app.use('/chat/media/v1/audio', express.static(`${globalThis.mediaDirectory}/chat/audio`));
-app.use('/grewtale/media/v1/videos', express.static(`${globalThis.mediaDirectory}/grewtales/videos`));
-app.use('/grewtale/media/v1/thumbnails', express.static(`${globalThis.mediaDirectory}/grewtales/thumbnails`));
+app.use(
+  '/grewtale/media/v1/videos',
+  express.static(`${globalThis.mediaDirectory}/grewtales/videos`)
+);
+app.use(
+  '/grewtale/media/v1/thumbnails',
+  express.static(`${globalThis.mediaDirectory}/grewtales/thumbnails`)
+);
 app.use('', router);
 // run server
-app.listen(PORT, "0.0.0.0", () => lightship.signalReady()); 
+app.listen(PORT, '0.0.0.0', () => lightship.signalReady());

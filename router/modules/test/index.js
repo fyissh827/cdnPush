@@ -1,16 +1,6 @@
 const e = require('cors');
 
-const u = require('./ui.json'); 
+const u = require('./ui.json');
 module.exports = {
-
-async test(req, res){
-  
-      
-      
-   
-   
-  
-}
-}
-
-
+  async test(req, res) {},
+};

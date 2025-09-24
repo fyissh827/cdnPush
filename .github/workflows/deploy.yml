@@ -3,7 +3,7 @@ name: Deploy to Local Server
 on:
   push:
     branches:
-      - main  # runs only when pushing to main branch
+      - main # runs only when pushing to main branch
 
 jobs:
   deploy:
@@ -21,8 +21,8 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "."
-          target: "/home/admin/domains/hydrogen"
+          source: '.'
+          target: '/home/admin/domains/hydrogen'
 
       # Step 3: Build Docker image & run container on server
       - name: Build and run Docker container

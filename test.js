@@ -1,1 +1,1 @@
-console.log('hello ci/cd')
+console.log('hello ci/cd');
