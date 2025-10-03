@@ -10,6 +10,7 @@ const { createLightship } = require('lightship');
 const bunyanMiddleware = require('bunyan-middleware');
 const { logger, bunyan } = require('./helper/logger');
 const lightship = createLightship();
+const axios  = require('axios');
 require('dotenv').config();
 
 // set up port
@@ -65,10 +66,8 @@ globalThis.mediaDirectory = process.env.IMAGE_PATH || '/home/admin/domains/media
 console.log(process.env);
 app.get('/communicate', async function (req, res) {
   try{
-  const response = await fetch(`${process.env.MAINAPI_URL || 'http://localhost:3000'}/check`);
-   const data = await response.json();
-  res.json({'data' : data});
-  }catch(e){
+    axios.get(`${process.env.MAINAPI_URL || 'http://localhost:3000'}/check`).then(r => res.json(r.data));
+   }catch(e){
     console.log(e);
     res.json({'error' : e});
   }
