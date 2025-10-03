@@ -67,9 +67,10 @@ app.get('/communicate', async function (req, res) {
   try{
   const response = await fetch(`${process.env.MAINAPI_URL || 'http://localhost:3000'}/check`);
    const data = await response.json();
-  res.json(data);
+  res.json({'data' : data});
   }catch(e){
-    res.json(e);
+    console.log(e);
+    res.json({'error' : e});
   }
 });
 app.get('/media', function (req, res) {
