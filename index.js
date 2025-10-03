@@ -65,12 +65,9 @@ app.get('/', (req, res) => {
 globalThis.mediaDirectory = process.env.IMAGE_PATH || '/home/admin/domains/media'; //path.resolve(__dirname  + '/../media');
 console.log(process.env);
 app.get('/communicate', async function (req, res) {
-  try{
-    axios.get(`${process.env.MAINAPI_URL || 'http://localhost:3000'}/check`).then(r => res.json(r.data));
-   }catch(e){
-    console.log(e);
-    res.json({'error' : e});
-  }
+ 
+    axios.get(`${process.env.MAINAPI_URL || 'http://localhost:3000'}/check`).then(r => res.json(r.data)).catch(e => res.json(e));
+ 
 });
 app.get('/media', function (req, res) {
   res.json(globalThis.mediaDirectory);
