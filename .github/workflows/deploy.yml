@@ -40,10 +40,15 @@ jobs:
             # Build new Docker image
             docker build -t cdnpush:latest .
 
-            # Run the container with media folder mounted
+            # Ensure external network exists
+            docker network create app_net || true
+
+            # Run the container with media folder mounted, env variables, and custom network
             docker run -d \
               -p 3003:3003 \
               --name cdnpush-container \
               -v /home/admin/domains/media:/media \
               -e IMAGE_PATH=/media \
+              -e MAINAPI_URL=http://central_api:3000 \
+              --network app_net \
               cdnpush:latest

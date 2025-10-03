@@ -7,7 +7,7 @@ const multi = require('../middleware/multi');
 const multi2 = require('../middleware/multi2');
 const multi4 = require('../middleware/multi4');
 //date
-
+const axios = require("axios");
 const pic_update = require('./modules/profilepic/update');
 
 //posting
@@ -32,7 +32,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.route('/check').get((_req, res) => {
-  res.status(200);
+    res.status(200);
   res.json({
     connected: true,
     status: 'online',

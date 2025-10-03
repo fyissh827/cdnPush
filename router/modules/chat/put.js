@@ -31,10 +31,10 @@ module.exports = {
     var messageType = req.body.messageType;
     var objType = req.body.objType;
     var objId = req.body.objId;
-    const url = (process.env.MAINAPI_URL || 'http://localhost:3000') + '/chat/message/put';
+   
 
     axios
-      .post(url, {
+      .post((process.env.MAINAPI_URL || 'http://localhost:3000') + '/chat/message/put', {
         obj,
         file_type,
         user2,

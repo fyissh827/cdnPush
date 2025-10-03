@@ -45,7 +45,7 @@
     "socket.io": "^4.1.2"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "npx  nodemon",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
