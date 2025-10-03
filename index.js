@@ -64,8 +64,8 @@ app.get('/', (req, res) => {
 globalThis.mediaDirectory = process.env.IMAGE_PATH || '/home/admin/domains/media'; //path.resolve(__dirname  + '/../media');
 console.log(process.env);
 app.get('/communicate', async function (req, res) {
-    const response = await fetch(`${process.env.MAINAPI_URL || 'http://localhost:3000'}/check`);
-  const data = await response.json();
+   // const response = await fetch(`${process.env.MAINAPI_URL || 'http://localhost:3000'}/check`);
+   const data = await response.json();
   res.json(data);
 });
 app.get('/media', function (req, res) {
