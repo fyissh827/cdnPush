@@ -35,7 +35,7 @@ jobs:
             cd /home/admin/domains/hydrogen
 
             # Remove old container if exists
-            docker rm -f cdnpush-container || true
+            docker rm -f cdnpush || true
 
             # Build new Docker image
             docker build -t cdnpush:latest .
@@ -49,6 +49,6 @@ jobs:
               --name cdnpush \
               -v /home/admin/domains/media:/media \
               -e IMAGE_PATH=/media \
-              -e MAINAPI_URL=http://central_api:3000 \
+              -e MAINAPI_URL=http://centrals:3000 \
               --network app_net \
               cdnpush:latest
