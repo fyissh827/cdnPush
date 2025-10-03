@@ -51,4 +51,4 @@ jobs:
               -e IMAGE_PATH=/media \
               -e MAINAPI_URL=http://centrals:3000 \
               --network app_net \
-              cdnpush:latest
+              cdnpush:latest        
