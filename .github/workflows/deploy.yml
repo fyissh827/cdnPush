@@ -46,7 +46,7 @@ jobs:
             # Run the container with media folder mounted, env variables, and custom network
             docker run -d \
               -p 3003:3003 \
-              --name cdnpush-container \
+              --name cdnpush \
               -v /home/admin/domains/media:/media \
               -e IMAGE_PATH=/media \
               -e MAINAPI_URL=http://central_api:3000 \
