@@ -10,7 +10,7 @@ services:
       - "3003:3003"
     environment:
       - IMAGE_PATH=/media
-      - MAINAPI_URL=http://central_api:3000
+      - MAINAPI_URL=http://central:3000
     command: >
       sh -c "npm install && npm start"
     networks:
