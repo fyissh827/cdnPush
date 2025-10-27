@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
         </style>
       </head>
       <body>
-        <h1>CDN SERVICE WORKING CORRECTLY.</h1>
+        <h1>CDNPUSH SERVICE WORKING CORRECTLY.</h1>
       </body>
     </html>
   `);
@@ -73,27 +73,9 @@ app.get('/media', function (req, res) {
   res.json(globalThis.mediaDirectory);
 });
 // ok....... ggdgdf
-app.use(favicon(path.join(__dirname, 'true.png')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/user/cus_profile/v2/photo', express.static(`${globalThis.mediaDirectory}/user/images`));
-app.use('/user/cus_profile/v1/photo', express.static(`${globalThis.mediaDirectory}/user/image`));
-app.use(
-  '/grewtale/media/v1/photo',
-  express.static(`${globalThis.mediaDirectory}/grewtales/images`)
-);
-app.use('/comment/media/v1/photo', express.static(`${globalThis.mediaDirectory}/comments/images`));
-app.use('/chat/media/v1/image', express.static(`${globalThis.mediaDirectory}/chat/image`));
-app.use('/chat/media/v1/audio', express.static(`${globalThis.mediaDirectory}/chat/audio`));
-app.use(
-  '/grewtale/media/v1/videos',
-  express.static(`${globalThis.mediaDirectory}/grewtales/videos`)
-);
-app.use(
-  '/grewtale/media/v1/thumbnails',
-  express.static(`${globalThis.mediaDirectory}/grewtales/thumbnails`)
-);
 app.use('', router);
 // run server
 app.listen(PORT, '0.0.0.0', () => lightship.signalReady());
