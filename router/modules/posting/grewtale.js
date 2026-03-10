@@ -77,7 +77,7 @@ module.exports = {
       res.json(response);
 
     } catch (error) {
-
+      console.log("major issue : "  , error);
       res.json({
         msg: 'Error',
         id: 0

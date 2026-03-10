@@ -13,10 +13,13 @@ const api = axios.create({
 });
 
 // generic request function
+
+try{
 async function request(config) {
   const response = await api(config);
   return response.data;
 }
+
 
 // circuit breaker
 const breaker = new CircuitBreaker(request, {
@@ -27,7 +30,10 @@ const breaker = new CircuitBreaker(request, {
 
 breaker.on('open', () => console.log('Central API Circuit OPEN'));
 breaker.on('close', () => console.log('Central API Circuit CLOSED'));
-
+}catch(e)
+{
+console.log("fault", e);
+}
 module.exports = {
   post: (url, data) => breaker.fire({ method: 'post', url, data }),
   get: (url, params) => breaker.fire({ method: 'get', url, params }),
