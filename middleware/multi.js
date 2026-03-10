@@ -3,9 +3,7 @@ const multer = require('multer');
 const multerS3 = require('multer-s3');
 const s3 = require('../service/s3Client');
 
-module.exports = {
-  upload: (process.env.s3) ? s3 : fileSystem
-};
+
 
 let fileSystem = multer({
     storage: multer.diskStorage({
@@ -29,11 +27,11 @@ let fileSystem = multer({
     }),
   });
 
-let s3 = multer({
+let s3Upload = multer({
     storage: multerS3({
       s3,
-      bucket: process.env.AWS_S3_BUCKET,
-      contentType: multerS3.AUTO_CONTENT_TYPE,
+      bucket: process.env.AWS_S3_BUCKET || 'dssadsad',
+      contentType: multerS3.AUTO_CONTENT_TYPE || 'dssadsadsa',
 
       key: (req, file, cb) => {
         let folder = 'grewtales/thumbnails';
@@ -55,3 +53,6 @@ let s3 = multer({
       fileSize: 100 * 1024 * 1024, // optional (100MB)
     },
   })
+module.exports = {
+  upload: (process.env.s3) ? s3Upload : fileSystem
+};

@@ -1,29 +1,29 @@
-const axios = require('axios').default;
+const centralApi = require('../../../externalCalls/index');
 
 module.exports = {
   async comment(req, res) {
-    var files_store = [];
-    for (var i = 0; i < req.files.length; i++) {
-      var name = req.files[i].filename;
-      files_store.push({ name: name });
-    }
-    const obj = JSON.stringify(files_store);
+    try {
 
-    var file_type = req.body.file_type;
-    var userId = req.userData.userId;
-    var grewtale = req.body.grewtale;
-    var primitive_id = req.body.primitive_id;
-    var accelerator = req.body.accelerator;
-    var message = req.body.message;
-    var type = req.body.type;
-    var standard = req.body.standard;
-    var iso = req.body.iso;
-    var point = req.body.point;
+      let files_store = [];
 
-    const url = (process.env.MAINAPI_URL || 'http://localhost:3000') + '/p/comment';
+      for (let i = 0; i < req.files.length; i++) {
+        files_store.push({ name: req.files[i].filename });
+      }
 
-    axios
-      .post(url, {
+      const obj = JSON.stringify(files_store);
+
+      const file_type = req.body.file_type;
+      const userId = req.userData.userId;
+      const grewtale = req.body.grewtale;
+      const primitive_id = req.body.primitive_id;
+      const accelerator = req.body.accelerator;
+      const message = req.body.message;
+      const type = req.body.type;
+      const standard = req.body.standard;
+      const iso = req.body.iso;
+      const point = req.body.point;
+
+      const response = await centralApi.post('/p/comment', {
         obj,
         file_type,
         userId,
@@ -34,13 +34,18 @@ module.exports = {
         type,
         standard,
         iso,
-        point,
-      })
-      .then((response) => {
-        res.json(response.data);
-      })
-      .catch((error) => {
-        res.json({ msg: 'Error', id: '0' });
+        point
       });
+
+      res.json(response);
+
+    } catch (error) {
+
+      res.json({
+        msg: 'Error',
+        id: '0'
+      });
+
+    }
   },
 };

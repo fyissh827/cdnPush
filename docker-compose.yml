@@ -5,7 +5,7 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-      - /home/admin/domains/media:/media
+      - /root/media:/media
     ports:
       - "3003:3003"
     environment:

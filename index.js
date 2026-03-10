@@ -12,7 +12,7 @@ const { logger, bunyan } = require('./helper/logger');
 const lightship = createLightship();
 const axios  = require('axios');
 require('dotenv').config();
-
+console.log(process.env);
 // set up port
 const PORT = process.env.PORT || 3003;
 
@@ -62,7 +62,7 @@ app.get('/', (req, res) => {
     </html>
   `);
 });
-globalThis.mediaDirectory = process.env.IMAGE_PATH || '/home/admin/domains/media'; //path.resolve(__dirname  + '/../media');
+globalThis.mediaDirectory = process.env.IMAGE_PATH || '/home/harshit/media'; //path.resolve(__dirname  + '/../media');
 console.log(process.env);
 app.get('/communicate', async function (req, res) {
  

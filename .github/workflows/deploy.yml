@@ -1,54 +1,65 @@
-name: Deploy to Local Server
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main # runs only when pushing to main branch
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
+      # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Copy project files to server
-      - name: Deploy project files to server
-        uses: appleboy/scp-action@v0.1.7
+      # 2. Setup Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: '.'
-          target: '/home/admin/domains/hydrogen'
+          node-version: 18
 
-      # Step 3: Build Docker image & run container on server
-      - name: Build and run Docker container
-        uses: appleboy/ssh-action@v0.1.10
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      # 4. Build project (if build script exists)
+      - name: Build project
+        run: npm run build || echo "No build step"
+
+      # 5. Deploy to VPS via SSH
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
           script: |
-            cd /home/admin/domains/hydrogen
+            set -e
 
-            # Remove old container if exists
-            docker rm -f cdnpush || true
+            echo "Starting deployment..."
 
-            # Build new Docker image
-            docker build -t cdnpush:latest .
+            cd /root/fyish/cdnPush
 
-            # Ensure external network exists
+            # Reset repo to avoid conflicts
+            git fetch origin
+            git reset --hard origin/main
+
+            # Ensure docker network exists
             docker network create app_net || true
 
-            # Run the container with media folder mounted, env variables, and custom network
-            docker run -d \
-              -p 3003:3003 \
-              --name cdnpush \
-              -v /home/admin/domains/media:/media \
-              -e IMAGE_PATH=/media \
-              -e MAINAPI_URL=http://centrals:3000 \
-              --network app_net \
-              cdnpush:latest        
+            # Stop old containers
+            docker compose -f server-compose.yml down || true
+
+            # Explicitly build Node.js Dockerfile
+            docker build --no-cache -t cdnPush:latest .
+
+            # Start containers using docker-compose
+            docker compose -f server-compose.yml up -d
+
+            echo "Deployment finished successfully"

@@ -1,21 +1,22 @@
 const multer = require('multer');
 const axios = require('axios').default;
+const centralApi = require('../../../externalCalls/index');
 
 module.exports = {
   async profilepic(req, res) {
-    var userId = req.userData.userId;
-    var profilepic = req.files.avatar[0].filename;
-    console.log(userId, profilepic);
+    try {
+      const userId = req.userData.userId;
+      const profilepic = req.files.avatar[0].filename;
 
-    const url = (process.env.MAINAPI_URL || 'http://localhost:3000') + '/upload/profilepic';
+      const response = await centralApi.post(
+        '/upload/profilepic',
+        { userId, profilepic }
+      );
 
-    axios
-      .post(url, { userId, profilepic })
-      .then((response) => {
-        res.json(response.data);
-      })
-      .catch((error) => {
-        res.json({ msg: 'Error' });
-      });
+      res.json(response);
+    } catch (error) {
+      console.error(error.message);
+      res.json({ msg: 'Error' });
+    }
   },
 };
