@@ -51,13 +51,13 @@ jobs:
             git reset --hard origin/main
 
             # Ensure docker network exists
-            docker network create app_net || true
+            # docker network create app_net || true
 
             # Stop old containers
             docker compose -f server-compose.yml down || true
 
             # Explicitly build Node.js Dockerfile
-            docker build --no-cache -t cdnPush:latest .
+            docker build --no-cache -t cdnpush:latest .
 
             # Start containers using docker-compose
             docker compose -f server-compose.yml up -d
